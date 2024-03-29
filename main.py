@@ -180,7 +180,7 @@ def set_normal_state_btn():
 
 root = tk.Tk()
 root.title("PERSONAL LEAVING HISTORY")
-root.geometry("380x600")
+root.geometry("600x600")
 root.configure(bg='white')
 
 status = "Application running"
