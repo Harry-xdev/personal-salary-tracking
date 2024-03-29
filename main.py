@@ -17,34 +17,35 @@ import functions
 
 
 # staffs_lst_2 = [
-# ('LÊ PHƯƠNG', '070032', 'TEST REQUEST', 'RD'),
-# ('TRƯƠNG TƯ XUÂN', '080262', 'TEST REQUEST', 'RD'),
-# ('TRƯƠNG THÀNH TAM', '080427', 'B/T', 'RD'),
-# ('LÊ THANH TUẤN', '101339', 'TEST REQUEST', 'RD'),
-# ('PHẠM THỊ PHƯƠNG', '172684', 'TEST REQUEST', 'RD'),
-# ('NGUYỄN HOÀNG VIỆT', '172759', 'TEST REQUEST', 'RD'),
-# ('NGUYỄN THỊ HỒNG YẾN', '172824', 'TEST REQUEST', 'RD'),
-# ('BÙI ĐÌNH HỒNG PHÚC', '193273', 'TEST REQUEST', 'RD'),
-# ('TRƯƠNG VĂN MINH', '203591', 'TEST REQUEST', 'RD'),
-# ('NGUYỄN QUANG QUÍ', '203638', 'TEST REQUEST', 'RD'),
-# ('NGUYỄN THỊ DIỄM MY', '213714', 'TEST REQUEST', 'RD'),
-# ('LÊ MINH THẮNG', '223906', 'TEST REQUEST', 'RD'),
-# ('LÊ QUỐC TRUNG', '224016', 'B/T', 'RD'),
-# ('NGUYỄN TUẤN ANH', '224057', 'TEST REQUEST', 'RD'),
-# ('TRẦN VĂN LƯU', '234102', 'TEST REQUEST', 'RD'),
-# ('LÊ HUỲNH ANH KHOA', '234168', 'B/T', 'RD'),
-# ('NGUYỄN MAI PHƯƠNG', '234170', 'TEST REQUEST', 'RD'),
-# ('PHẠM NG NGỌC TUYẾT', '234172', 'TEST REQUEST', 'RD'),
+# ['LÊ PHƯƠNG', '070032', 'TEST REQUEST', 'RD'],
+# ['TRƯƠNG TƯ XUÂN', '080262', 'TEST REQUEST', 'RD'],
+# ['TRƯƠNG THÀNH TAM', '080427', 'B/T', 'RD'],
+# ['LÊ THANH TUẤN', '101339', 'TEST REQUEST', 'RD'],
+# ['PHẠM THỊ PHƯƠNG', '172684', 'TEST REQUEST', 'RD'],
+# ['NGUYỄN HOÀNG VIỆT', '172759', 'TEST REQUEST', 'RD'],
+# ['NGUYỄN THỊ HỒNG YẾN', '172824', 'TEST REQUEST', 'RD'],
+# ['BÙI ĐÌNH HỒNG PHÚC', '193273', 'TEST REQUEST', 'RD'],
+# ['TRƯƠNG VĂN MINH', '203591', 'TEST REQUEST', 'RD'],
+# ['NGUYỄN QUANG QUÍ', '203638', 'TEST REQUEST', 'RD'],
+# ['NGUYỄN THỊ DIỄM MY', '213714', 'TEST REQUEST', 'RD'],
+# ['LÊ MINH THẮNG', '223906', 'TEST REQUEST', 'RD'],
+# ['LÊ QUỐC TRUNG', '224016', 'B/T', 'RD'],
+# ['NGUYỄN TUẤN ANH', '224057', 'TEST REQUEST', 'RD'],
+# ['TRẦN VĂN LƯU', '234102', 'TEST REQUEST', 'RD'],
+# ['LÊ HUỲNH ANH KHOA', '234168', 'B/T', 'RD'],
+# ['NGUYỄN MAI PHƯƠNG', '234170', 'TEST REQUEST', 'RD'],
+# ['PHẠM NG NGỌC TUYẾT', '234172', 'TEST REQUEST', 'RD'],
 # ]
-staffs_lst_2 = functions.import_staffs_data()
+file_path = 'datas/checking-staffs.csv'
+staffs_lst_2 = functions.import_staffs_data(file_path)
 
 def create_file():
-	filename = 'leaving-history.csv'
+	filename = 'datas/leaving-history.csv'
 	folder = os.getcwd()
 	file_path = os.path.join(folder, filename)
 	print(file_path)
 	if not os.path.exists(file_path):
-		with open('leaving-history.csv', 'w', encoding='utf-8', newline='') as file:
+		with open('datas/leaving-history.csv', 'w', encoding='utf-8', newline='') as file:
 			writer = csv.writer(file)
 			writer.writerow(['staff_name', 'id', 'start_time', 'leaving_time', 'reason', 'department', 'date'])
 		print('Csv file created.')
@@ -55,13 +56,16 @@ def convert_csv_xlsx(file):
 	# update_display("EXCEL FILE EXPORTED TO 'Y:/4. R&D/Report/CAR SAMPLE/CHECK-IN/'", '')
 	data = pd.read_csv(file, dtype={1: str})
 	# data.to_excel('work-log.xlsx', index=False)
-	storage_path = 'Y:/4. R&D/Report/CAR SAMPLE/CHECK-IN/overtime-log.xlsx'
-	if os.path.exists(storage_path):
+	storage_path_1 = 'Y:/4. R&D/Report/CAR SAMPLE/CHECK-IN/overtime-log.xlsx'
+	storage_path_2 = 'excels/overtime-log.xlsx'
+
+	if os.path.exists(storage_path_1):
 		data.to_excel(r'Y:/4. R&D/Report/CAR SAMPLE/CHECK-IN/overtime-log.xlsx', index=False)
 		print("Excel exported to'Y:/4. R&D/Report/CAR SAMPLE/CHECK-IN/overtime-log.xlsx'")
 	else:
 		print('Storage destination unavailable, excel file changed save to root folder.')
-		data.to_excel('overtime-log.xlsx', index=False)
+		data.to_excel(storage_path_2, index=False)
+	# data.to_excel(storage_path_2, index=False)
 
 def open_export_folder():
 	export_path = 'Y:/4. R&D/Report/CAR SAMPLE/CHECK-IN'
@@ -105,7 +109,7 @@ def on_leave_btn_click(button_text, button):
 	else: start_time = '16:30'
 	update_staff = staff + [button_text[0], button_text[1], start_time, time, button_text[2], button_text[3], date]
 
-	with open('leaving-history.csv', 'a', encoding='utf-8', newline='') as file:
+	with open('datas/leaving-history.csv', 'a', encoding='utf-8', newline='') as file:
 		writer = csv.writer(file)
 		writer.writerow(update_staff)
 
@@ -125,7 +129,7 @@ def open_list_recent_added():
 	def toggle_button(line, btn):
 		btn.configure(state=tk.DISABLED, bg='grey')
 		lines = []
-		with open('leaving-history.csv', 'r', encoding='utf-8', newline='') as file:
+		with open('datas/leaving-history.csv', 'r', encoding='utf-8', newline='') as file:
 			reader = csv.reader(file)
 			for row in reader:
 				lines.append(row)
@@ -134,12 +138,12 @@ def open_list_recent_added():
 				lines.remove(line)
 				print('Item removed successfully.')
 
-		with open('leaving-history.csv', 'w', encoding='utf-8', newline='') as file:
+		with open('datas/leaving-history.csv', 'w', encoding='utf-8', newline='') as file:
 			writer = csv.writer(file)
 			for row in lines:
 				writer.writerow(row)
 
-	with open('leaving-history.csv', 'r', encoding='utf-8') as file:
+	with open('datas/leaving-history.csv', 'r', encoding='utf-8') as file:
 		reader = csv.reader(file)
 		lines = list(reader)
 
@@ -213,7 +217,7 @@ for i in staffs_lst_2[9:]:
 edit_btn = tk.Button(root, text='Chỉnh sửa (xoá mục)', command=open_list_recent_added, fg='#a52a2a', width=16, height=1 )
 edit_btn.place(x=102, y=207)
 
-export_btn = tk.Button(root, text='Export excel file', width=13, fg='#a52a2a', command=lambda: convert_csv_xlsx('leaving-history.csv'))
+export_btn = tk.Button(root, text='Export excel file', width=13, fg='#a52a2a', command=lambda: convert_csv_xlsx('datas/leaving-history.csv'))
 export_btn.place(x=0, y=180)
 
 open_folder_btn = tk.Button(root, text='Open excel location...', width=16, command=lambda: open_export_folder())
@@ -225,6 +229,6 @@ refesh_btn.place(x=0, y=207)
 info = tk.Label(root, text='Check-in tool - Author: Tuan Anh - Date: 03-25-2024-All rights reserved', fg='#55f210', bg='black')
 info.place(x=0, y=580)
 
-# convert_csv_xlsx('leaving-history.csv')
+# convert_csv_xlsx('datas/leaving-history.csv')
 root.mainloop()
-# convert_csv_xlsx('leaving-history.csv')
+# convert_csv_xlsx('datas/leaving-history.csv')
